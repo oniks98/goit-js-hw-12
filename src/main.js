@@ -1,23 +1,11 @@
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
-
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
-import './js/pixabay-api.js';
-import './js/render-functions.js';
+import { fetchImages } from './js/pixabay-api.js';
+import { renderImages } from './js/render-functions.js';
 
 const form = document.querySelector('.search-form');
 const galleryList = document.querySelector('.gallery');
-
-let qSearchParams = '';
-let lightbox = new SimpleLightbox('.gallery-link', {
-  captionsData: 'alt',
-  captionDelay: 250,
-  overlayOpacity: 0.8,
-  widthRatio: 0.9,
-  heightRatio: 0.9,
-});
 
 form.addEventListener('submit', searchImages);
 
@@ -25,78 +13,29 @@ function searchImages(event) {
   event.preventDefault();
   galleryList.innerHTML = '';
 
-  qSearchParams = event.target.elements.query.value;
+  const qSearchParams = event.target.elements.query.value.trim();
   if (qSearchParams === '') return;
 
-  showLoadingImagesMessage();
+  showLoaderSpinner();
 
-  fetchImages()
-    .then(images => {
-      closeLoadingImagesMessage();
-      if (images.hits.length === 0) {
-        showNoImagesMessage();
-        return;
-      }
-      renderImages(images);
-    })
-    .catch(error => {
-      closeLoadingImagesMessage();
-      showNoImagesMessage();
-    });
+  setTimeout(() => {
+    //секундочку погратися спінером
+    fetchImages(qSearchParams)
+      .then(images => {
+        removeLoaderSpinner();
+        if (images.hits.length === 0) {
+          showNoImagesMessage();
+          return;
+        }
+        renderImages(images, galleryList);
+      })
+      .catch(error => {
+        removeLoaderSpinner();
+        showServerErrorMessage();
+      });
 
-  form.reset();
-}
-
-function fetchImages() {
-  const searchParams = new URLSearchParams({
-    key: '46722048-aff8075d188208e090c3b0c14',
-    q: qSearchParams,
-    image_type: 'photo',
-    orientation: 'horizontal',
-    safesearch: 'true',
-  });
-  const url = `https://pixabay.com/api/?${searchParams}`;
-
-  return fetch(url).then(response => {
-    if (!response.ok) {
-      throw new Error(response.status);
-    }
-    return response.json();
-  });
-}
-
-function renderImages(images) {
-  const markup = images.hits
-    .map(image => {
-      return `<li class="gallery-image_item">
-                     <a href="${image.largeImageURL}" class="gallery-link">
-              <img src="${image.webformatURL}" alt="${image.tags}" />
-            </a>
-         <ul class="gallery-image_caption">
-            <li>
-            <p class="image-caption_text">Likes</p>
-            <p class="image-caption_number">${image.likes} </p>
-            </li>
-            <li>
-            <p class="image-caption_text">Views</p>
-            <p class="image-caption_number">${image.views}</p>
-            </li>
-            <li>
-            <p class="image-caption_text">Comments</p>
-            <p class="image-caption_number">${image.comments}</p>
-            </li>
-            <li>
-            <p class="image-caption_text">Downloads</p>
-            <p class="image-caption_number">${image.downloads}</p>
-            </li>
-          </ul>
-        </li>`;
-    })
-    .join('');
-
-  galleryList.insertAdjacentHTML('beforeend', markup);
-
-  lightbox.refresh();
+    form.reset();
+  }, 1000);
 }
 
 function showNoImagesMessage() {
@@ -107,22 +46,30 @@ function showNoImagesMessage() {
     messageSize: '18',
     backgroundColor: 'red',
     position: 'topRight',
-    timeout: 3000,
+    timeout: 2000,
   });
 }
 
-function showLoadingImagesMessage() {
+function showServerErrorMessage() {
   iziToast.show({
-    message: 'Loading images, please wait...',
-    messageColor: 'black',
+    message: '❌ Sorry, there was a server error. Please try again later!',
+    messageColor: 'white',
     messageSize: '18',
-    position: 'center',
-    timeout: false,
-    close: true,
-    progressBar: true,
+    backgroundColor: 'red',
+    position: 'topRight',
+    timeout: 2000,
   });
 }
 
-function closeLoadingImagesMessage() {
-  iziToast.hide({}, document.querySelector('.iziToast'));
+function showLoaderSpinner() {
+  const loaderSpinner = document.createElement('span');
+  loaderSpinner.classList.add('loader');
+  galleryList.append(loaderSpinner);
+}
+
+function removeLoaderSpinner() {
+  const loaderSpinner = document.querySelector('.loader');
+  if (loaderSpinner) {
+    loaderSpinner.remove();
+  }
 }
