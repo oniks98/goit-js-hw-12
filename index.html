@@ -19,19 +19,23 @@
       rel="stylesheet"
     />
     <script type="module" crossorigin src="/goit-js-hw-11/index.js"></script>
-    <link rel="stylesheet" crossorigin href="/goit-js-hw-11/assets/index-CymAZ-mU.css">
+    <link rel="modulepreload" crossorigin href="/goit-js-hw-11/assets/vendor-BrddEoy-.js">
+    <link rel="stylesheet" crossorigin href="/goit-js-hw-11/assets/vendor-CWKLx11g.css">
+    <link rel="stylesheet" crossorigin href="/goit-js-hw-11/assets/index-BfRKXnFE.css">
   </head>
   <body>
-    <form class="feedback-form" autocomplete="off">
-      <input
-        type="email"
-        name="email"
-        placeholder="Fill please all fields"
-        autofocus
-      />
+    <div class="box">
+      <form class="search-form" autocomplete="off">
+        <input
+          class="search-input"
+          type="text"
+          name="query"
+          placeholder="Search images..."
+        />
 
-      <button type="submit">Submit</button>
-    </form>
+        <button type="submit">Search</button>
+      </form>
+    </div>
 
     <ul class="gallery"></ul>
 
