@@ -18,24 +18,21 @@ function searchImages(event) {
 
   showLoaderSpinner();
 
-  setTimeout(() => {
-    //секундочку погратися спінером
-    fetchImages(qSearchParams)
-      .then(images => {
-        removeLoaderSpinner();
-        if (images.hits.length === 0) {
-          showNoImagesMessage();
-          return;
-        }
-        renderImages(images, galleryList);
-      })
-      .catch(error => {
-        removeLoaderSpinner();
-        showServerErrorMessage();
-      });
+  fetchImages(qSearchParams)
+    .then(images => {
+      removeLoaderSpinner();
+      if (images.hits.length === 0) {
+        showNoImagesMessage();
+        return;
+      }
+      renderImages(images, galleryList);
+    })
+    .catch(error => {
+      removeLoaderSpinner();
+      showServerErrorMessage();
+    });
 
-    form.reset();
-  }, 1000);
+  form.reset();
 }
 
 function showNoImagesMessage() {
