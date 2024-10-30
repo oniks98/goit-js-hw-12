@@ -1,7 +1,7 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-const lightbox = new SimpleLightbox('.gallery-link', {
+export const lightbox = new SimpleLightbox('.gallery-link', {
   captionsData: 'alt',
   captionDelay: 250,
   overlayOpacity: 0.8,
@@ -9,30 +9,38 @@ const lightbox = new SimpleLightbox('.gallery-link', {
   heightRatio: 0.9,
 });
 
-export function renderImages(images, galleryList) {
-  const markup = images.hits
+export function renderGallery(photoArray, galleryList) {
+  const markup = photoArray
     .map(
-      image =>
+      ({
+        largeImageURL,
+        webformatURL,
+        tags,
+        likes,
+        views,
+        comments,
+        downloads,
+      }) =>
         `<li class="gallery-image_item">
-            <a href="${image.largeImageURL}" class="gallery-link">
-              <img src="${image.webformatURL}" alt="${image.tags}"/>
+            <a href="${largeImageURL}" class="gallery-link">
+              <img src="${webformatURL}" alt="${tags}"/>
             </a>
             <ul class="gallery-image_caption">
               <li>
                 <p class="image-caption_text">Likes</p>
-                <p class="image-caption_number">${image.likes}</p>
+                <p class="image-caption_number">${likes}</p>
               </li>
               <li>
                 <p class="image-caption_text">Views</p>
-                <p class="image-caption_number">${image.views}</p>
+                <p class="image-caption_number">${views}</p>
               </li>
               <li>
                 <p class="image-caption_text">Comments</p>
-                <p class="image-caption_number">${image.comments}</p>
+                <p class="image-caption_number">${comments}</p>
               </li>
               <li>
                 <p class="image-caption_text">Downloads</p>
-                <p class="image-caption_number">${image.downloads}</p>
+                <p class="image-caption_number">${downloads}</p>
               </li>
             </ul>
         </li>`

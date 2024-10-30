@@ -1,7 +1,7 @@
-export function fetchImages(qSearchParams) {
+export function fetchData(searchData) {
   const searchParams = new URLSearchParams({
     key: '46722048-aff8075d188208e090c3b0c14',
-    q: qSearchParams,
+    q: searchData,
     image_type: 'photo',
     orientation: 'horizontal',
     safesearch: 'true',
