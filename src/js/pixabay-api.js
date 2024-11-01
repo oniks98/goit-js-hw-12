@@ -1,7 +1,7 @@
-export function fetchData(searchData) {
+function fetchPhoto(query) {
   const searchParams = new URLSearchParams({
     key: '46722048-aff8075d188208e090c3b0c14',
-    q: searchData,
+    q: query,
     image_type: 'photo',
     orientation: 'horizontal',
     safesearch: 'true',
@@ -15,3 +15,5 @@ export function fetchData(searchData) {
     return response.json();
   });
 }
+
+export { fetchPhoto };

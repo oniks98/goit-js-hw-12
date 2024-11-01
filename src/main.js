@@ -1,31 +1,31 @@
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
-import { fetchData } from './js/pixabay-api.js';
+import { fetchPhoto } from './js/pixabay-api.js';
 import { renderGallery } from './js/render-functions.js';
 
 const form = document.querySelector('.search-form');
-const galleryList = document.querySelector('.gallery');
+const gallery = document.querySelector('.gallery');
 
-form.addEventListener('submit', searchImages);
+form.addEventListener('submit', searchPhoto);
 
-function searchImages(event) {
+function searchPhoto(event) {
   event.preventDefault();
-  galleryList.innerHTML = '';
+  gallery.innerHTML = '';
 
-  const searchData = event.target.elements.query.value.trim();
-  if (searchData === '') return;
+  const query = event.target.elements.query.value.trim();
+  if (query === '') return;
 
   showSpinner();
 
-  fetchData(searchData)
-    .then(responseData => {
+  fetchPhoto(query)
+    .then(response => {
       deleteSpinner();
-      if (responseData.hits.length === 0) {
+      if (response.hits.length === 0) {
         showNoImagesMessage();
         return;
       }
-      renderGallery(responseData.hits, galleryList);
+      renderGallery(response.hits, gallery);
     })
     .catch(error => {
       deleteSpinner();
@@ -61,7 +61,7 @@ function showServerErrorMessage() {
 function showSpinner() {
   const spinner = document.createElement('span');
   spinner.classList.add('loader');
-  galleryList.append(spinner);
+  gallery.append(spinner);
 }
 
 function deleteSpinner() {

@@ -9,8 +9,8 @@ const lightbox = new SimpleLightbox('.gallery-link', {
   heightRatio: 0.9,
 });
 
-export function renderGallery(photoArray, galleryList) {
-  const markup = photoArray
+function renderGallery(arrayPhoto, gallery) {
+  const markup = arrayPhoto
     .map(
       ({
         largeImageURL,
@@ -47,7 +47,9 @@ export function renderGallery(photoArray, galleryList) {
     )
     .join('');
 
-  galleryList.insertAdjacentHTML('beforeend', markup);
+  gallery.insertAdjacentHTML('beforeend', markup);
 
   lightbox.refresh();
 }
+
+export { renderGallery };
