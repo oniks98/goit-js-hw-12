@@ -9,7 +9,7 @@ const gallery = document.querySelector('.gallery');
 
 form.addEventListener('submit', searchPhoto);
 
-function searchPhoto(event) {
+async function searchPhoto(event) {
   event.preventDefault();
   gallery.innerHTML = '';
 
@@ -18,20 +18,21 @@ function searchPhoto(event) {
 
   toggleSpinner(true);
 
-  fetchPhoto(query)
-    .then(arrayPhoto => {
-      toggleSpinner(false);
+  try {
+    const arrayPhoto = await fetchPhoto(query);
 
-      if (arrayPhoto.length === 0) {
-        showNoImagesMessage();
-        return;
-      }
-      renderGallery(arrayPhoto, gallery);
-    })
-    .catch(error => {
-      toggleSpinner(false);
-      showServerErrorMessage();
-    });
+    toggleSpinner(false);
+
+    if (arrayPhoto.length === 0) {
+      showNoImagesMessage();
+      return;
+    }
+
+    renderGallery(arrayPhoto, gallery);
+  } catch (error) {
+    toggleSpinner(false);
+    showServerErrorMessage();
+  }
 
   form.reset();
 }
