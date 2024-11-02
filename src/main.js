@@ -14,21 +14,22 @@ function searchPhoto(event) {
   gallery.innerHTML = '';
 
   const query = event.target.elements.query.value.trim();
-  if (query === '') return;
+  if (!query) return;
 
-  showSpinner();
+  toggleSpinner(true);
 
   fetchPhoto(query)
-    .then(response => {
-      deleteSpinner();
-      if (response.hits.length === 0) {
+    .then(arrayPhoto => {
+      toggleSpinner(false);
+
+      if (arrayPhoto.length === 0) {
         showNoImagesMessage();
         return;
       }
-      renderGallery(response.hits, gallery);
+      renderGallery(arrayPhoto, gallery);
     })
     .catch(error => {
-      deleteSpinner();
+      toggleSpinner(false);
       showServerErrorMessage();
     });
 
@@ -39,34 +40,28 @@ function showNoImagesMessage() {
   iziToast.show({
     message:
       '❌ Sorry, there are no images matching your search query. Please try again!',
-    messageColor: 'white',
-    messageSize: '18',
-    backgroundColor: 'red',
+    color: 'red',
     position: 'topRight',
-    timeout: 2000,
+    timeout: 3000,
   });
 }
 
 function showServerErrorMessage() {
   iziToast.show({
     message: '❌ Sorry, there was a server error. Please try again later!',
-    messageColor: 'white',
-    messageSize: '18',
-    backgroundColor: 'red',
+    color: 'red',
     position: 'topRight',
-    timeout: 2000,
+    timeout: 3000,
   });
 }
 
-function showSpinner() {
-  const spinner = document.createElement('span');
-  spinner.classList.add('loader');
-  gallery.append(spinner);
-}
-
-function deleteSpinner() {
-  const spinner = document.querySelector('.loader');
-  if (spinner) {
+function toggleSpinner(isVisible) {
+  if (isVisible) {
+    const spinner = document.createElement('span');
+    spinner.classList.add('loader');
+    gallery.append(spinner);
+  } else {
+    const spinner = document.querySelector('.loader');
     spinner.remove();
   }
 }
