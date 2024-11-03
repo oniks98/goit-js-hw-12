@@ -16,10 +16,10 @@ let query;
 
 form.addEventListener('submit', searchPhoto);
 loadMoreButton.addEventListener('click', searchPhoto);
-loadMoreButton.style.display = 'none';
 
 async function searchPhoto(event) {
   event.preventDefault();
+  // loadMoreButton.style.display = 'none';
 
   if (event.target.elements) {
     query = event.target.elements.query.value.trim();
@@ -35,6 +35,7 @@ async function searchPhoto(event) {
   if (querylocalStorage !== query) {
     gallery.innerHTML = '';
     page = 1;
+    loadMoreButton.style.display = 'none';
   }
 
   localStorage.setItem('key-query', query);
@@ -53,11 +54,13 @@ async function searchPhoto(event) {
     if (arrayPhoto.length === 0) {
       showNoImagesMessage();
     } else {
+      loadMoreButton.style.display = 'none';
+      console.log(loadMoreButton.style.display);
       renderGallery(arrayPhoto, gallery);
       page += 1;
       loadMoreButton.style.display = 'block';
 
-      console.log(page);
+      console.log(loadMoreButton.style.display);
     }
     const elementsGallery = gallery.querySelectorAll('.gallery-image_item');
     console.log(elementsGallery.length);

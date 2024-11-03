@@ -118,6 +118,7 @@ p {
 .button-load-more {
   margin: 0, auto;
   border: none;
+  display: none;
   cursor: pointer;
   text-align: center;
   margin-left: 8px;

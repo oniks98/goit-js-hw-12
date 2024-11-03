@@ -1,3 +1,7 @@
+.box-loader {
+  position: relative;
+}
+
 .loader {
   width: 20px;
   aspect-ratio: 1;
