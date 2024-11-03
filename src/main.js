@@ -19,8 +19,8 @@ loadMoreButton.addEventListener('click', searchPhoto);
 
 async function searchPhoto(event) {
   event.preventDefault();
-  // loadMoreButton.style.display = 'none';
 
+  // Збереження або отримання значення пошукового запиту
   if (event.target.elements) {
     query = event.target.elements.query.value.trim();
   } else {
@@ -35,11 +35,14 @@ async function searchPhoto(event) {
   if (querylocalStorage !== query) {
     gallery.innerHTML = '';
     page = 1;
-    loadMoreButton.style.display = 'none';
   }
 
   localStorage.setItem('key-query', query);
   querylocalStorage = localStorage.getItem('key-query');
+
+  // Приховуємо кнопку "Load More" під час завантаження
+  loadMoreButton.style.display = 'none';
+  // await new Promise(resolve => requestAnimationFrame(resolve));
 
   toggleSpinner(true);
 
@@ -47,26 +50,24 @@ async function searchPhoto(event) {
     const response = await fetchPhoto(query, page);
     const arrayPhoto = response.data.hits;
     const totalHits = response.data.totalHits;
-    console.log(totalHits);
 
     toggleSpinner(false);
 
     if (arrayPhoto.length === 0) {
       showNoImagesMessage();
+      form.reset();
+      return;
     } else {
-      loadMoreButton.style.display = 'none';
-      console.log(loadMoreButton.style.display);
       renderGallery(arrayPhoto, gallery);
       page += 1;
-      loadMoreButton.style.display = 'block';
 
-      console.log(loadMoreButton.style.display);
-    }
-    const elementsGallery = gallery.querySelectorAll('.gallery-image_item');
-    console.log(elementsGallery.length);
-    if (elementsGallery.length === totalHits && elementsGallery.length !== 0) {
-      showEndSearchMessage();
-      loadMoreButton.style.display = 'none';
+      // Показуємо кнопку "Load More", якщо є ще що завантажувати
+      const elementsGallery = gallery.querySelectorAll('.gallery-image_item');
+      if (elementsGallery.length < totalHits) {
+        loadMoreButton.style.display = 'block';
+      } else {
+        showEndSearchMessage();
+      }
     }
   } catch (error) {
     toggleSpinner(false);
