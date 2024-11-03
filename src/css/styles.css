@@ -36,7 +36,7 @@ input:focus {
   color: #2e2f42;
 }
 
-button {
+.button-form {
   border: none;
   cursor: pointer;
   text-align: center;
@@ -53,8 +53,8 @@ button {
   color: #fff;
 }
 
-button:hover,
-button:focus {
+.button-form:hover,
+.button-form:focus {
   background-color: #6c8cff;
 }
 
@@ -66,7 +66,7 @@ button:focus {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
-  margin: 0 auto;
+  margin: 0 auto 32px;
   max-width: 1128px;
 }
 
@@ -113,4 +113,34 @@ p {
 .image-caption_text,
 .image-caption_number {
   text-align: center;
+}
+
+.button-load-more {
+  margin: 0, auto;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  margin-left: 8px;
+  transition-property: background-color;
+  transition-duration: 250ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px;
+  padding: 8px 16px;
+  width: 125px;
+  height: 40px;
+  background-color: #4e75ff;
+  font-weight: 500;
+  color: #fff;
+}
+
+.button-load-more:hover,
+.button-load-more:focus {
+  background-color: #6c8cff;
+}
+
+.box-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 44px;
 }
