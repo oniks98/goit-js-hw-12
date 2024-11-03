@@ -42,7 +42,7 @@ async function searchPhoto(event) {
 
   // Приховуємо кнопку "Load More" під час завантаження
   loadMoreButton.style.display = 'none';
-  // await new Promise(resolve => requestAnimationFrame(resolve));
+  await new Promise(resolve => requestAnimationFrame(resolve));
 
   toggleSpinner(true);
 
