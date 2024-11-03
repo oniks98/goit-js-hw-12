@@ -19,8 +19,8 @@ loadMoreButton.addEventListener('click', searchPhoto);
 
 async function searchPhoto(event) {
   event.preventDefault();
+  loadMoreButton.style.display = 'none';
 
-  // Збереження або отримання значення пошукового запиту
   if (event.target.elements) {
     query = event.target.elements.query.value.trim();
   } else {
@@ -40,10 +40,7 @@ async function searchPhoto(event) {
   localStorage.setItem('key-query', query);
   querylocalStorage = localStorage.getItem('key-query');
 
-  // Приховуємо кнопку "Load More" під час завантаження
   loadMoreButton.style.display = 'none';
-  await new Promise(resolve => requestAnimationFrame(resolve));
-
   toggleSpinner(true);
 
   try {
@@ -61,7 +58,6 @@ async function searchPhoto(event) {
       renderGallery(arrayPhoto, gallery);
       page += 1;
 
-      // Показуємо кнопку "Load More", якщо є ще що завантажувати
       const elementsGallery = gallery.querySelectorAll('.gallery-image_item');
       if (elementsGallery.length < totalHits) {
         loadMoreButton.style.display = 'block';
@@ -83,7 +79,7 @@ function showNoImagesMessage() {
       '❌ Sorry, there are no images matching your search query. Please try again!',
     color: 'red',
     position: 'topRight',
-    timeout: 3000,
+    timeout: 2000,
   });
 }
 
@@ -92,7 +88,7 @@ function showServerErrorMessage() {
     message: '❌ Sorry, there was a server error. Please try again later!',
     color: 'red',
     position: 'topRight',
-    timeout: 3000,
+    timeout: 2000,
   });
 }
 
@@ -101,7 +97,7 @@ function showEndSearchMessage() {
     message: "We're sorry, but you've reached the end of search results.",
     color: 'red',
     position: 'topRight',
-    timeout: 3000,
+    timeout: 2000,
   });
 }
 
@@ -110,6 +106,7 @@ function toggleSpinner(isVisible) {
     const spinner = document.createElement('span');
     spinner.classList.add('loader');
     boxLoader.append(spinner);
+    loadMoreButton.style.display = 'none';
   } else {
     const spinner = document.querySelector('.loader');
     if (spinner) spinner.remove();
