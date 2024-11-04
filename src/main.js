@@ -7,19 +7,19 @@ import { renderGallery } from './js/render-functions.js';
 const form = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
 const loadMoreButton = document.querySelector('.button-load-more');
-
 const boxLoader = document.querySelector('.box-loader');
 
 let querylocalStorage = localStorage.getItem('key-query') || '';
 let page = 1;
 let query;
+let isFirstLoad = true;
+let perPage = 15;
 
 form.addEventListener('submit', searchPhoto);
 loadMoreButton.addEventListener('click', searchPhoto);
 
 async function searchPhoto(event) {
   event.preventDefault();
-  loadMoreButton.style.display = 'none';
 
   if (event.target.elements) {
     query = event.target.elements.query.value.trim();
@@ -35,12 +35,13 @@ async function searchPhoto(event) {
   if (querylocalStorage !== query) {
     gallery.innerHTML = '';
     page = 1;
+    isFirstLoad = true;
   }
 
   localStorage.setItem('key-query', query);
   querylocalStorage = localStorage.getItem('key-query');
 
-  loadMoreButton.style.display = 'none';
+  toggleButton(loadMoreButton, false);
   toggleSpinner(true);
 
   try {
@@ -56,14 +57,15 @@ async function searchPhoto(event) {
       return;
     } else {
       renderGallery(arrayPhoto, gallery);
-      page += 1;
+      handleScroll();
 
-      const elementsGallery = gallery.querySelectorAll('.gallery-image_item');
-      if (elementsGallery.length < totalHits) {
-        loadMoreButton.style.display = 'block';
+      if (perPage * page < totalHits) {
+        toggleButton(loadMoreButton, true);
       } else {
         showEndSearchMessage();
       }
+
+      page += 1;
     }
   } catch (error) {
     toggleSpinner(false);
@@ -101,14 +103,23 @@ function showEndSearchMessage() {
   });
 }
 
-function toggleSpinner(isVisible) {
-  if (isVisible) {
-    const spinner = document.createElement('span');
-    spinner.classList.add('loader');
-    boxLoader.append(spinner);
-    loadMoreButton.style.display = 'none';
-  } else {
-    const spinner = document.querySelector('.loader');
-    if (spinner) spinner.remove();
+function handleScroll() {
+  if (!isFirstLoad) {
+    const cardGallery = document.querySelector('.gallery-image_item');
+    const cardGalleryHeight = cardGallery.getBoundingClientRect().height;
+
+    window.scrollBy({
+      top: cardGalleryHeight * 2,
+      behavior: 'smooth',
+    });
   }
+  isFirstLoad = false;
+}
+
+function toggleButton(button, isVisible) {
+  button.style.display = isVisible ? 'block' : 'none';
+}
+
+function toggleSpinner(isVisible) {
+  boxLoader.style.display = isVisible ? 'block' : 'none';
 }

@@ -1,5 +1,6 @@
 .box-loader {
   position: relative;
+  display: none;
 }
 
 .loader {
