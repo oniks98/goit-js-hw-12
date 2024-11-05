@@ -92,6 +92,14 @@ function createPagination(totalHits) {
   }
 }
 
+function toggleButton(button, isVisible) {
+  button.style.display = isVisible ? 'block' : 'none';
+}
+
+function toggleSpinner(isVisible) {
+  boxLoader.style.display = isVisible ? 'block' : 'none';
+}
+
 function scrollOnLoad() {
   if (!isFirstLoad) {
     const cardGallery = document.querySelector('.gallery-image_item');
@@ -104,11 +112,30 @@ function scrollOnLoad() {
   }
   isFirstLoad = false;
 }
+/////////////////////////////////////////////////////////////////////
+// це для себе
+// Варіант з підгонкою края картки до края браузера:
+// прокручуємо так, щоб верхня частина першої картки потрібного рядка
+// (індекс cardIndex) співпадала з верхнім краєм вікна браузера
 
-function toggleButton(button, isVisible) {
-  button.style.display = isVisible ? 'block' : 'none';
-}
+// let rowIndex = 5; // Індекс для потрібного рядка
 
-function toggleSpinner(isVisible) {
-  boxLoader.style.display = isVisible ? 'block' : 'none';
-}
+// function scrollOnLoad() {
+//   if (!isFirstLoad) {
+//     const cards = document.querySelectorAll('.gallery-image_item');
+
+//     // індекс картки, з якої починається потрібний рядок
+//     const cardIndex = rowIndex * 3;
+
+//     if (cards.length > cardIndex) {
+//       cards[cardIndex].scrollIntoView({
+//         behavior: 'smooth',
+//         block: 'start',
+//       });
+
+//       rowIndex += 5;
+//     }
+//   }
+//   isFirstLoad = false;
+// }
+///////////////////////////////////////////////////////////////////////////
